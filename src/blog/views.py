@@ -1,8 +1,11 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import Http404 # longer version to display 404 errors
 
 # Create your views here.
 # Relative import
+from .forms import BlogPostForm, BlogPostModelForm
 from .models import BlogPost
 
 # GET -> 1 object
@@ -32,12 +35,18 @@ def blog_post_list_view(request):
     context = {'object_list': qs}
     return render(request, template_name, context)
 
-
+# @login_required
+@staff_member_required
 def blog_post_create_view(request):
     # create objects
     # ? use a form
-    template_name = 'blog/create.html'
-    context = {'form': None}
+    form = BlogPostModelForm(request.POST or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.save()
+        form = BlogPostModelForm()
+    template_name = 'form.html'
+    context = {'form': form}
     return render(request, template_name, context)
 
 

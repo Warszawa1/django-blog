@@ -37,7 +37,8 @@ INSTALLED_APPS = [ # components (little pieces that build to the django project 
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+
+    'blog', # pluggable
 ]
 
 MIDDLEWARE = [

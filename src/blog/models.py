@@ -12,6 +12,15 @@ class BlogPost(models.Model): # blogpost_set -> gives you the queryset
     slug = models.SlugField(unique=True) # hello world -> hello-world
     content = models.TextField(null=True, blank=True)
 
+    def get_absolute_url(self):
+        return f"/blog/{self.slug}"
+
+    def get_edit_url(self):
+        return f"/blog/{self.slug}/edit"
+
+    def get_delete_url(self):
+        return f"/blog/{self.slug}/delete"
+
 
 
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.http import Http404 # longer version to display 404 errors
+from django.http import Http404# longer version to display 404 errors
 
 # Create your views here.
 # Relative import
@@ -28,12 +28,15 @@ from .models import BlogPost
 # CRUD (Create, Retrieve, Update, Delete)
 def blog_post_list_view(request):
     # list out objects
-    qs = BlogPost.objects.all() # queryset -> list of python objects
+    qs = BlogPost.objects.all().published() # queryset -> list of python objects
     # could be search
     # qs = BlogPost.objects.filter(title__icontains='Hola')
+    # now = timezone.now()
+    # ONLY SHOWS THE POSTS THAT ARE PUBLISHED
+    # qs = BlogPost.objects.filter(publish_date__gte=now)
     if request.user.is_authenticated:
         my_qs = BlogPost.objects.filter(user=request.user)
-        qs = (qs | my_qs).distinct()
+        qs = (qs | my_qs).distinct() #so it does not have duplicatesl
     template_name = 'blog/list.html'
     context = {'object_list': qs}
     return render(request, template_name, context)
